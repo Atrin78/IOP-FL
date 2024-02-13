@@ -106,7 +106,7 @@ if __name__ == "__main__":
           print('Finish intialization')
           
           rounds = {
-               'I2CVB': [10, 10, 10 10, 10],
+               'I2CVB': [10, 10, 10, 10, 10],
                'RUNMC': [84, 87, 97, 99, 86],
                'HK': [80, 92, 73, 87, 91],
                'BIDMC': [78, 91, 72, 80, 74],
