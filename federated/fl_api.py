@@ -79,14 +79,14 @@ class FedAvgAPI(object):
 
                 # train on new dataset
                 w = client.train(copy.deepcopy(w_global))
-                # client.save_trajectory(round_idx)
+                client.save_trajectory(round_idx)
                 # self.logger.info("local weights = " + str(w))
                 w_locals.append((client.get_sample_number(), copy.deepcopy(w)))
 
             # update global weights
             w_global = self._aggregate(w_locals)
             # save global weights
-            # torch.save(w_global, os.path.join(self.args.save_path, "{}_global_round{}".format(self.args.mode, round_idx)))
+            torch.save(w_global, os.path.join(self.args.save_path, "{}_global_round{}".format(self.args.mode, round_idx)))
             self.model_trainer.set_model_params(w_global)
             # local validation
             self._local_val_on_all_clients(round_idx)
