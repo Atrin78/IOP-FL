@@ -51,7 +51,7 @@ class RandomFlip:
 
 class Prostate(Dataset):
     '''
-    Six prostate dataset (BIDMC, HK, I2CVB, ISBI, ISBI_1.5, UCL)
+    Six prostate dataset (BIDMC, HK, I2CVB, RUNMC, BMC, UCL)
     '''
     def __init__(self, site, base_path=None, split='train', transform=None):
         channels = {'BIDMC':3, 'HK':3, 'I2CVB':3, 'ISBI':3, 'ISBI_1.5':3, 'UCL':3}
