@@ -54,7 +54,7 @@ class Prostate(Dataset):
     Six prostate dataset (BIDMC, HK, I2CVB, RUNMC, BMC, UCL)
     '''
     def __init__(self, site, base_path=None, split='train', transform=None):
-        channels = {'BIDMC':3, 'HK':3, 'I2CVB':3, 'ISBI':3, 'ISBI_1.5':3, 'UCL':3}
+        channels = {'BIDMC':3, 'HK':3, 'I2CVB':3, 'RUNMC':3, 'BMC':3, 'UCL':3}
         assert site in list(channels.keys())
         self.split = split
         

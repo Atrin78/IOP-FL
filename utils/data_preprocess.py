@@ -6,7 +6,7 @@ def normalize(arr):
     return (arr-np.mean(arr)) / np.std(arr)
 
 
-clients = ['BIDMC', 'HK', 'I2CVB', 'ISBI', 'ISBI_1.5', 'UCL']
+clients = ['BIDMC', 'HK', 'I2CVB', 'RUNMC', 'BMC', 'UCL']
 base_path = '../dataset/Prostate/data'
 tar_path = '../dataset/Prostate/processed'
 for client in clients:
