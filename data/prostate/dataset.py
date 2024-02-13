@@ -58,7 +58,7 @@ class Prostate(Dataset):
         assert site in list(channels.keys())
         self.split = split
         
-        base_path = base_path if base_path is not None else '/research/d6/gds/mrjiang/Dataset/Prostate/preprocessed'
+        base_path = base_path if base_path is not None else './dataset/Prostate/preprocessed'
         
         with open(os.path.join(base_path,site+f'_{split}.txt'),'r') as f:
             f_names = [line.rstrip() for line in f.readlines()]
