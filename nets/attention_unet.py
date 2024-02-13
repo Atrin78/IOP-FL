@@ -14,17 +14,17 @@ class Attention_block(nn.Module):
     def __init__(self,F_g,F_l,F_int, name):
         super(Attention_block,self).__init__()
         self.W_g = nn.Sequential(
-            RouteConv2D(F_g, F_int, name=name+'_g', kernel_size=1,stride=1,padding=0,bias=True),
+            RouteConv2D(F_g, F_int, name=name+'_W_g', kernel_size=1,stride=1,padding=0,bias=True),
             nn.BatchNorm2d(F_int)
             )
         
         self.W_x = nn.Sequential(
-            RouteConv2D(F_l, F_int, name=name+'_x', kernel_size=1,stride=1,padding=0,bias=True),
+            RouteConv2D(F_l, F_int, name=name+'_W_x', kernel_size=1,stride=1,padding=0,bias=True),
             nn.BatchNorm2d(F_int)
         )
 
         self.psi = nn.Sequential(
-            RouteConv2D(F_int, 1, name=name+'_psi', kernel_size=1,stride=1,padding=0,bias=True),
+            RouteConv2D(F_int, 1, name=name+'_W_psi', kernel_size=1,stride=1,padding=0,bias=True),
             nn.BatchNorm2d(1),
             nn.Sigmoid()
         )
@@ -70,10 +70,10 @@ class attention_UNet(nn.Module):
 
         self.bottleneck = attention_UNet._block(features * 8, features * 16, name="bottleneck", bn_affine=bn_affine, bn_track=bn_track, prefix_name="bottleneck.")
 
-        self.att4 = Attention_block(features * 8, features * 8, features * 4, name="attention4")
-        self.att3 = Attention_block(features * 4, features * 4, features * 2, name="attention3")
-        self.att2 = Attention_block(features * 2, features * 2, features, name="attention2")
-        self.att1 = Attention_block(features * 1, features * 1, features//2, name="attention1")
+        self.att4 = Attention_block(features * 8, features * 8, features * 4, name="att4")
+        self.att3 = Attention_block(features * 4, features * 4, features * 2, name="att3")
+        self.att2 = Attention_block(features * 2, features * 2, features, name="att2")
+        self.att1 = Attention_block(features * 1, features * 1, features//2, name="att1")
 
         self.upconv4 = RouteConvTranspose2D(
             features * 16, features * 8, kernel_size=2, name="upconv4" ,stride=2
