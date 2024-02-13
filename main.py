@@ -45,11 +45,13 @@ def custom_model_trainer(args):
      
      args.lr = 1e-3
      if args.ood_test:
-         from nets.UNet import UNet
-         model = UNet(input_shape=[3, 384, 384])
-     else:
          from nets.attention_unet import attention_UNet
          model = attention_UNet(input_shape=[3, 384, 384])
+         
+     else:
+         from nets.models import UNet
+         model = UNet(input_shape=[3, 384, 384])
+
      model_trainer = ModelTrainerSegmentation(model, args)
      
      return model_trainer
@@ -90,7 +92,7 @@ if __name__ == "__main__":
           from nets.routeconv import RouteConv2D, RouteConvTranspose2D
           
           global_round = {
-               'I2CVB': 95,
+               'I2CVB': 10,
                'RUNMC': 99,
                'HK': 96,
                'BIDMC': 97,
@@ -98,13 +100,13 @@ if __name__ == "__main__":
                'BMC': 99,
                }
           
-          #ckpt = torch.load('./snapshots/{}/fedavg_global_round{}'.format(args.target, global_round[args.target]))
+          ckpt = torch.load(args.save_path +'/fedavg_global_round{}'.format(global_round[args.target]))
           
-          #model_trainer.set_model_params(ckpt)
-          #print('Finish intialization')
+          model_trainer.set_model_params(ckpt)
+          print('Finish intialization')
           
           rounds = {
-               'I2CVB': [55, 73, 89, 92, 79],
+               'I2CVB': [10, 10, 10 10, 10],
                'RUNMC': [84, 87, 97, 99, 86],
                'HK': [80, 92, 73, 87, 91],
                'BIDMC': [78, 91, 72, 80, 74],
@@ -112,14 +114,14 @@ if __name__ == "__main__":
                'BMC': [50, 83, 99, 99, 94],
                }
           
-          #paths = [
-          #    torch.load('./snapshots/{}/fedavg_idx_0_round{}'.format(args.target, rounds[args.target][0])),
-          #    torch.load('./snapshots/{}/fedavg_idx_1_round{}'.format(args.target, rounds[args.target][1])),
-          #    torch.load('./snapshots/{}/fedavg_idx_2_round{}'.format(args.target, rounds[args.target][2])),
-          #    torch.load('./snapshots/{}/fedavg_idx_3_round{}'.format(args.target, rounds[args.target][3])),
-          #    torch.load('./snapshots/{}/fedavg_idx_4_round{}'.format(args.target, rounds[args.target][4])),
-          #    torch.load('./snapshots/{}/fedavg_global_round{}'.format(args.target, global_round[args.target]))
-          #]
+          paths = [
+              torch.load(args.save_path +'/fedavg_idx_0_round{}'.format(rounds[args.target][0])),
+              torch.load(args.save_path +'/fedavg_idx_1_round{}'.format(rounds[args.target][1])),
+              torch.load(args.save_path +'/fedavg_idx_2_round{}'.format(rounds[args.target][2])),
+              torch.load(args.save_path +'/fedavg_idx_3_round{}'.format(rounds[args.target][3])),
+              torch.load(args.save_path +'/fedavg_idx_4_round{}'.format(rounds[args.target][4])),
+              torch.load(args.save_path +'/fedavg_global_round{}'.format(global_round[args.target]))
+          ]
         
           for m in model_trainer.model.modules():
               if isinstance(m, RouteConv2D) or isinstance(m, RouteConvTranspose2D):

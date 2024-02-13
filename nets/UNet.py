@@ -10,6 +10,36 @@ from torchvision.models.resnet import BasicBlock, model_urls, Bottleneck
 
 from .routeconv import RouteConv2D, RouteConvTranspose2D
 
+class Attention_block(nn.Module):
+    def __init__(self,F_g,F_l,F_int, name):
+        super(Attention_block,self).__init__()
+        self.W_g = nn.Sequential(
+            RouteConv2D(F_g, F_int, name=name+'_g', kernel_size=1,stride=1,padding=0,bias=True),
+            nn.BatchNorm2d(F_int)
+            )
+        
+        self.W_x = nn.Sequential(
+            RouteConv2D(F_l, F_int, name=name+'_x', kernel_size=1,stride=1,padding=0,bias=True),
+            nn.BatchNorm2d(F_int)
+        )
+
+        self.psi = nn.Sequential(
+            RouteConv2D(F_int, 1, name=name+'_psi', kernel_size=1,stride=1,padding=0,bias=True),
+            nn.BatchNorm2d(1),
+            nn.Sigmoid()
+        )
+        
+        self.relu = nn.ReLU(inplace=True)
+        
+    def forward(self,g,x):
+        g1 = self.W_g(g)
+        x1 = self.W_x(x)
+        psi = self.relu(g1+x1)
+        psi = self.psi(psi)
+
+        return x*psi
+
+
 class ViewFlatten(nn.Module):
 	def __init__(self):
 		super(ViewFlatten, self).__init__()
@@ -39,6 +69,11 @@ class UNet(nn.Module):
         self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
 
         self.bottleneck = UNet._block(features * 8, features * 16, name="bottleneck", bn_affine=bn_affine, bn_track=bn_track, prefix_name="bottleneck.")
+
+        self.att4 = Attention_block(features * 8, features * 8, features * 4, name="attention4")
+        self.att3 = Attention_block(features * 4, features * 4, features * 2, name="attention3")
+        self.att2 = Attention_block(features * 2, features * 2, features, name="attention2")
+        self.att1 = Attention_block(features * 1, features * 1, features//2, name="attention1")
 
         self.upconv4 = RouteConvTranspose2D(
             features * 16, features * 8, kernel_size=2, name="upconv4" ,stride=2
@@ -82,20 +117,25 @@ class UNet(nn.Module):
             return logits
 
         dec4 = self.upconv4(bottleneck)
+        enc4 = self.att4(dec4, enc4)
         dec4 = torch.cat((dec4, enc4), dim=1)
         dec4 = self.decoder4(dec4)
 
         dec3 = self.upconv3(dec4)
+        enc3 = self.att3(dec3, enc3)
         dec3 = torch.cat((dec3, enc3), dim=1)
         dec3 = self.decoder3(dec3)
 
         dec2 = self.upconv2(dec3)
+        enc2 = self.att2(dec2, enc2)
         dec2 = torch.cat((dec2, enc2), dim=1)
         dec2 = self.decoder2(dec2)
 
         dec1 = self.upconv1(dec2)
+        enc1 = self.att1(dec1, enc1)
         dec1 = torch.cat((dec1, enc1), dim=1)
         dec1 = self.decoder1(dec1)
+
 
         dec1 = self.conv(dec1)
         
