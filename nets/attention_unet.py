@@ -47,7 +47,7 @@ class ViewFlatten(nn.Module):
 	def forward(self, x):
 		return x.view(x.size(0), -1)
 
-class atttention_UNet(nn.Module):
+class attention_UNet(nn.Module):
 
     def __init__(self, input_shape, in_channels=3, out_channels=2, init_features=32, untrack_bn=False):
         super(attention_UNet, self).__init__()
