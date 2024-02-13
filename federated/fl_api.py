@@ -93,8 +93,8 @@ class FedAvgAPI(object):
             #local test
             self._local_test_on_all_clients(round_idx)
             # test results
-            # self._ood_test_on_global_model(round_idx, self.ood_client, self.ood_data, w_global)
-            # self._ood_test_on_trajectory(round_idx)
+            self._ood_test_on_global_model(round_idx, self.ood_client, self.ood_data, w_global)
+            self._ood_test_on_trajectory(round_idx)
           
 
             # local val results
@@ -104,16 +104,16 @@ class FedAvgAPI(object):
             local_performance_by_global_model_pd = pd.DataFrame.from_dict(self.local_performance_by_global_model)
             local_performance_by_trajectory_pd = pd.DataFrame.from_dict(self.local_performance_by_trajectory)
             # ood results
-            # ood_performance_pd = pd.DataFrame.from_dict(self.ood_performance)
-            # ood_performance_by_trajectory_pd = pd.DataFrame.from_dict(self.ood_performance_by_trajectory)
+            ood_performance_pd = pd.DataFrame.from_dict(self.ood_performance)
+            ood_performance_by_trajectory_pd = pd.DataFrame.from_dict(self.ood_performance_by_trajectory)
 
 
             local_val_by_global_model_pd.to_csv(os.path.join(self.args.save_path,self.args.mode + "_local_val_by_global_model.csv"))
             local_val_by_trajectory_pd.to_csv(os.path.join(self.args.save_path,self.args.mode + "_local_val_by_trajectory.csv"))
             local_performance_by_global_model_pd.to_csv(os.path.join(self.args.save_path,self.args.mode + "_local_performance_by_global_model.csv"))
             local_performance_by_trajectory_pd.to_csv(os.path.join(self.args.save_path,self.args.mode + "_local_performance_by_trajectory.csv"))
-            # ood_performance_pd.to_csv(os.path.join(self.args.save_path,self.args.mode + "_ood_performance.csv"))
-            # ood_performance_by_trajectory_pd.to_csv(os.path.join(self.args.save_path,self.args.mode + "_ood_performance_by_trajectory.csv"))
+            ood_performance_pd.to_csv(os.path.join(self.args.save_path,self.args.mode + "_ood_performance.csv"))
+            ood_performance_by_trajectory_pd.to_csv(os.path.join(self.args.save_path,self.args.mode + "_ood_performance_by_trajectory.csv"))
            
     def _client_sampling(self, round_idx, client_num_in_total, client_num_per_round):
         if client_num_in_total == client_num_per_round:
