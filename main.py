@@ -29,7 +29,7 @@ def deterministic(seed):
      
 
 def set_paths(args):
-     args.save_path = '../io-pfl-exp/checkpoint/{}/{}/seed{}_batch{}_lr{}'.format(args.data, args.target, args.seed, args.batch, args.lr)
+     args.save_path = '../io-pfl-exp-att/checkpoint/{}/{}/seed{}_batch{}_lr{}'.format(args.data, args.target, args.seed, args.batch, args.lr)
 
      exp_folder = '{}'.format(args.mode)
 
