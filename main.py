@@ -49,7 +49,7 @@ def custom_model_trainer(args):
          model = UNet(input_shape=[3, 384, 384])
      else:
          from nets.attention_unet import attention_UNet
-         model = UNet(input_shape=[3, 384, 384])
+         model = attention_UNet(input_shape=[3, 384, 384])
      model_trainer = ModelTrainerSegmentation(model, args)
      
      return model_trainer
