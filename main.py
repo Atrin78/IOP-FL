@@ -113,12 +113,12 @@ if __name__ == "__main__":
                }
           
           paths = [
-              torch.load(args.save_path+'/fedavg_idx_0_round{}'.format(args.target, rounds[args.target][0])),
-              torch.load(args.save_path+'/fedavg_idx_1_round{}'.format(args.target, rounds[args.target][1])),
-              torch.load(args.save_path+'/fedavg_idx_2_round{}'.format(args.target, rounds[args.target][2])),
-              torch.load(args.save_path+'/fedavg_idx_3_round{}'.format(args.target, rounds[args.target][3])),
-              torch.load(args.save_path+'/fedavg_idx_4_round{}'.format(args.target, rounds[args.target][4])),
-              torch.load(args.save_path+'/fedavg_global_round{}'.format(args.target, global_round[args.target]))
+              torch.load(args.save_path+'/fedavg_idx_0_round{}'.format(rounds[args.target][0])),
+              torch.load(args.save_path+'/fedavg_idx_1_round{}'.format(rounds[args.target][1])),
+              torch.load(args.save_path+'/fedavg_idx_2_round{}'.format(rounds[args.target][2])),
+              torch.load(args.save_path+'/fedavg_idx_3_round{}'.format(rounds[args.target][3])),
+              torch.load(args.save_path+'/fedavg_idx_4_round{}'.format(rounds[args.target][4])),
+              torch.load(args.save_path+'/fedavg_global_round{}'.format(global_round[args.target]))
           ]
         
           for m in model_trainer.model.modules():
