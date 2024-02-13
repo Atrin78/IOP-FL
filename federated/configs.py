@@ -13,7 +13,7 @@ def set_configs():
      parser.add_argument('--batch', type = int, default=5, help ='batch size')
      parser.add_argument("--source", choices=available_datasets, help="Source", nargs='+')
      parser.add_argument("--target", choices=available_datasets, default=None, help="Target")
-     parser.add_argument('--comm_round', type = int, default=500, help = 'communication rounds')
+     parser.add_argument('--comm_round', type = int, default=1, help = 'communication rounds')
      parser.add_argument('--wk_iters', type = int, default=1, help = 'optimization iters in local worker between communication')
      parser.add_argument('--mode', type = str, default='fedavg', help='[FedAvg | FedProx | FedBN | FedAdam | FedNova | FedNovaBN | FedBABU | FedAda]')
      parser.add_argument('--save_path', type = str, default='../checkpoint/', help='path to save the checkpoint')
