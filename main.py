@@ -91,11 +91,11 @@ if __name__ == "__main__":
           
           global_round = {
                'I2CVB': 95,
-               'ISBI': 99,
+               'RUNMC': 99,
                'HK': 96,
                'BIDMC': 97,
                'UCL': 95,
-               'ISBI_1.5': 99,
+               'BMC': 99,
                }
           
           ckpt = torch.load('./snapshots/{}/fedavg_global_round{}'.format(args.target, global_round[args.target]))
@@ -105,11 +105,11 @@ if __name__ == "__main__":
           
           rounds = {
                'I2CVB': [55, 73, 89, 92, 79],
-               'ISBI': [84, 87, 97, 99, 86],
+               'RUNMC': [84, 87, 97, 99, 86],
                'HK': [80, 92, 73, 87, 91],
                'BIDMC': [78, 91, 72, 80, 74],
                'UCL': [99, 90, 87, 91, 99],
-               'ISBI_1.5': [50, 83, 99, 99, 94],
+               'BMC': [50, 83, 99, 99, 94],
                }
           
           paths = [

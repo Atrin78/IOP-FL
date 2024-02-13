@@ -1,7 +1,7 @@
 import argparse
 import yaml
 
-prosate = ['BIDMC', 'HK',  'ISBI', 'ISBI_1.5', 'UCL', 'I2CVB', None]
+prosate = ['BIDMC', 'HK',  'RUNMC', 'BMC', 'UCL', 'I2CVB', None]
 available_datasets = prosate 
    
 def set_configs():
