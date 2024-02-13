@@ -63,7 +63,7 @@ class RouteConv2D(_ConvNd):
             self.num_experts, self.out_channels, self.in_channels // self.groups, *self.kernel_size))
     
         for idx in range(self.client_num):
-            print(state_dicts[idx])
+            print(state_dicts[idx].keys())
             local_data_weight = state_dicts[idx][self.name+'.weight']
             self.init_data.append(local_data_weight)
             if self.use_bias:
