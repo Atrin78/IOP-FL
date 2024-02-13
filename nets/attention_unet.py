@@ -14,17 +14,17 @@ class Attention_block(nn.Module):
     def __init__(self,F_g,F_l,F_int, name):
         super(Attention_block,self).__init__()
         self.W_g = nn.Sequential(
-            RouteConv2D(F_g, F_int, name=name+'_W_g', kernel_size=1,stride=1,padding=0,bias=True),
+            RouteConv2D(F_g, F_int, name=name+'.W_g', kernel_size=1,stride=1,padding=0,bias=True),
             nn.BatchNorm2d(F_int)
             )
         
         self.W_x = nn.Sequential(
-            RouteConv2D(F_l, F_int, name=name+'_W_x', kernel_size=1,stride=1,padding=0,bias=True),
+            RouteConv2D(F_l, F_int, name=name+'.W_x', kernel_size=1,stride=1,padding=0,bias=True),
             nn.BatchNorm2d(F_int)
         )
 
         self.psi = nn.Sequential(
-            RouteConv2D(F_int, 1, name=name+'_W_psi', kernel_size=1,stride=1,padding=0,bias=True),
+            RouteConv2D(F_int, 1, name=name+'.W_psi', kernel_size=1,stride=1,padding=0,bias=True),
             nn.BatchNorm2d(1),
             nn.Sigmoid()
         )
