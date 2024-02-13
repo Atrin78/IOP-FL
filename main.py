@@ -98,7 +98,7 @@ if __name__ == "__main__":
                'BMC': 99,
                }
           
-          ckpt = torch.load(args.save_path+'/fedavg_global_round{}'.format(args.target, global_round[args.target]))
+          ckpt = torch.load(args.save_path+'/fedavg_global_round{}'.format(global_round[args.target]))
           
           model_trainer.set_model_params(ckpt)
           print('Finish intialization')
