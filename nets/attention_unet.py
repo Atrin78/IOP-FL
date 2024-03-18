@@ -29,7 +29,7 @@ class Attention_block(nn.Module):
 
         self.psi = nn.Sequential(
             OrderedDict([
-            ('0', RouteConv2D(F_int, 1, name=name+'.W_psi'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
+            ('0', RouteConv2D(F_int, 1, name=name+'.psi'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
             ('1', nn.BatchNorm2d(1)),
             ('2', nn.Sigmoid())
         ])
