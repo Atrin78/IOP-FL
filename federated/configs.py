@@ -10,7 +10,7 @@ def set_configs():
      parser.add_argument('--lr', type=float, default=1e-3, help='learning rate')
      parser.add_argument('--early', action='store_true', help='early stop w/o improvement over 10 epochs')
      parser.add_argument('--pretrain', action='store_true', help='Use AlexNet|Resnet pretrained ImageNet')
-     parser.add_argument('--batch', type = int, default=1, help ='batch size')
+     parser.add_argument('--batch', type = int, default=5, help ='batch size')
      parser.add_argument("--source", choices=available_datasets, help="Source", nargs='+')
      parser.add_argument("--target", choices=available_datasets, default=None, help="Target")
      parser.add_argument('--comm_round', type = int, default=100, help = 'communication rounds')
