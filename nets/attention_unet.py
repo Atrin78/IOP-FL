@@ -15,23 +15,23 @@ class Attention_block(nn.Module):
         super(Attention_block,self).__init__()
         self.W_g = nn.Sequential(
             OrderedDict([
-            (name+'.W_g'+'.0', RouteConv2D(F_g, F_int, name=name+'.W_g'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
-            (name+'.W_g'+'.1', nn.BatchNorm2d(F_int))
+            (name+'_W_g'+'_0', RouteConv2D(F_g, F_int, name=name+'_W_g'+'_0', kernel_size=1,stride=1,padding=0,bias=True)),
+            (name+'_W_g'+'_1', nn.BatchNorm2d(F_int))
             ])
             )
         
         self.W_x = nn.Sequential(
             OrderedDict([
-            (name+'.W_x'+'.0', RouteConv2D(F_l, F_int, name=name+'.W_x'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
-            (name+'.W_x'+'.1', nn.BatchNorm2d(F_int))
+            (name+'_W_x'+'_0', RouteConv2D(F_l, F_int, name=name+'_W_x'+'_0', kernel_size=1,stride=1,padding=0,bias=True)),
+            (name+'_W_x'+'_1', nn.BatchNorm2d(F_int))
         ])
         )
 
         self.psi = nn.Sequential(
             OrderedDict([
-            (name+'.W_psi'+'.0', RouteConv2D(F_int, 1, name=name+'.W_psi'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
-            (name+'.W_psi'+'.1', nn.BatchNorm2d(1)),
-            (name+'.W_psi'+'.2', nn.Sigmoid())
+            (name+'_W_psi'+'_0', RouteConv2D(F_int, 1, name=name+'_W_psi'+'_0', kernel_size=1,stride=1,padding=0,bias=True)),
+            (name+'_W_psi'+'_1', nn.BatchNorm2d(1)),
+            (name+'_W_psi'+'_2', nn.Sigmoid())
         ])
         )
         
