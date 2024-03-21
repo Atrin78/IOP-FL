@@ -130,7 +130,7 @@ if __name__ == "__main__":
           metrics = federated_manager.ood_client.test_time_adaptation_by_iopfl(None)
           
      elif args.test:
-          ckpt = torch.load('trained local trajectory path')
+          ckpt = torch.load(args.save_path +'/fedavg_global_round{}'.format(global_round[args.target]))
           model_trainer.set_model_params(ckpt)
           test_data_local_dict = datasets[1][-2]
           # test the trajectroy on all local clients
