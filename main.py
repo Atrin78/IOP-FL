@@ -130,6 +130,14 @@ if __name__ == "__main__":
           metrics = federated_manager.ood_client.test_time_adaptation_by_iopfl(None)
           
      elif args.test:
+          global_round = {
+               'I2CVB': 10,
+               'RUNMC': 99,
+               'HK': 96,
+               'BIDMC': 97,
+               'UCL': 95,
+               'BMC': 99,
+               }
           ckpt = torch.load(args.save_path +'/fedavg_global_round{}'.format(global_round[args.target]))
           model_trainer.set_model_params(ckpt)
           test_data_local_dict = datasets[1][-2]
