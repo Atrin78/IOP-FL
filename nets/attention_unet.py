@@ -10,58 +10,23 @@ from torchvision.models.resnet import BasicBlock, model_urls, Bottleneck
 
 from .routeconv import RouteConv2D, RouteConvTranspose2D
 
-class Attention_block(nn.Module):
-    def __init__(self,F_g,F_l,F_int, name):
-        super(Attention_block,self).__init__()
-        self.W_g = nn.Sequential(
-            nn.Conv2d(F_g, F_int, kernel_size=1,stride=1,padding=0,bias=True),
-            nn.BatchNorm2d(F_int)
-            )
-        
-        self.W_x = nn.Sequential(
-            nn.Conv2d(F_l, F_int, kernel_size=1,stride=1,padding=0,bias=True),
-            nn.BatchNorm2d(F_int)
-        )
-
-        self.psi = nn.Sequential(
-            nn.Conv2d(F_int, 1, kernel_size=1,stride=1,padding=0,bias=True),
-            nn.BatchNorm2d(1),
-            nn.Sigmoid()
-        )
-        
-        self.relu = nn.ReLU(inplace=True)
-        
-    def forward(self,g,x):
-        g1 = self.W_g(g)
-        x1 = self.W_x(x)
-        psi = self.relu(g1+x1)
-        psi = self.psi(psi)
-
-        return x*psi
-
 #class Attention_block(nn.Module):
 #    def __init__(self,F_g,F_l,F_int, name):
 #        super(Attention_block,self).__init__()
 #        self.W_g = nn.Sequential(
-#            OrderedDict([
-#            ('0', RouteConv2D(F_g, F_int, name=name+'.W_g'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
-#            ('1', nn.BatchNorm2d(F_int))
-#            ])
+#            nn.Conv2d(F_g, F_int, kernel_size=1,stride=1,padding=0,bias=True),
+#            nn.BatchNorm2d(F_int)
 #            )
 #        
 #        self.W_x = nn.Sequential(
-#            OrderedDict([
-#            ('0', RouteConv2D(F_l, F_int, name=name+'.W_x'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
-#            ('1', nn.BatchNorm2d(F_int))
-#        ])
+#            nn.Conv2d(F_l, F_int, kernel_size=1,stride=1,padding=0,bias=True),
+#            nn.BatchNorm2d(F_int)
 #        )
-#
+
 #        self.psi = nn.Sequential(
-#            OrderedDict([
-#            ('0', RouteConv2D(F_int, 1, name=name+'.psi'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
-#            ('1', nn.BatchNorm2d(1)),
-#            ('2', nn.Sigmoid())
-#        ])
+#            nn.Conv2d(F_int, 1, kernel_size=1,stride=1,padding=0,bias=True),
+#            nn.BatchNorm2d(1),
+#            nn.Sigmoid()
 #        )
 #        
 #        self.relu = nn.ReLU(inplace=True)
@@ -73,6 +38,41 @@ class Attention_block(nn.Module):
 #        psi = self.psi(psi)
 
 #        return x*psi
+
+class Attention_block(nn.Module):
+    def __init__(self,F_g,F_l,F_int, name):
+        super(Attention_block,self).__init__()
+        self.W_g = nn.Sequential(
+            OrderedDict([
+            ('0', RouteConv2D(F_g, F_int, name=name+'.W_g'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
+            ('1', nn.BatchNorm2d(F_int))
+            ])
+            )
+        
+        self.W_x = nn.Sequential(
+            OrderedDict([
+            ('0', RouteConv2D(F_l, F_int, name=name+'.W_x'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
+            ('1', nn.BatchNorm2d(F_int))
+        ])
+        )
+
+        self.psi = nn.Sequential(
+            OrderedDict([
+            ('0', RouteConv2D(F_int, 1, name=name+'.psi'+'.0', kernel_size=1,stride=1,padding=0,bias=True)),
+            ('1', nn.BatchNorm2d(1)),
+            ('2', nn.Sigmoid())
+        ])
+        )
+        
+        self.relu = nn.ReLU(inplace=True)
+        
+    def forward(self,g,x):
+        g1 = self.W_g(g)
+        x1 = self.W_x(x)
+        psi = self.relu(g1+x1)
+        psi = self.psi(psi)
+
+        return x*psi
 
 
 class ViewFlatten(nn.Module):
