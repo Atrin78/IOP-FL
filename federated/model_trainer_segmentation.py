@@ -80,7 +80,7 @@ class ModelTrainerSegmentation(ModelTrainer):
                 param.requires_grad_(True)
                 update_var_list.append(param)
                 update_name_list.append(name)
-        optimizer = torch.optim.Adam(update_var_list, lr=1e-3, betas=(0.9, 0.999))
+        optimizer = torch.optim.Adam(update_var_list, lr=1e-4, betas=(0.9, 0.999))
         criterion = DiceLoss().to(device)
         loss_all = 0
         test_acc = 0.
