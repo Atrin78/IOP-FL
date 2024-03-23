@@ -80,7 +80,7 @@ class ModelTrainerSegmentation(ModelTrainer):
                 param.requires_grad_(True)
                 update_var_list.append(param)
                 update_name_list.append(name)
-        optimizer = torch.optim.Adam(update_var_list, lr=1e-4, betas=(0.9, 0.999))
+        optimizer = torch.optim.Adam(update_var_list, lr=1e-3, betas=(0.9, 0.999))
         criterion = DiceLoss().to(device)
         loss_all = 0
         test_acc = 0.
@@ -250,4 +250,18 @@ def generate_names():
         names.append(name)
         name = "upconv{}._routing_fn.fc2.bias".format(i)
         names.append(name)
+    for i in range(1, 5):
+        for j in range(2):
+            name = "att{}.W_g.{}.weight".format(i,j)
+            names.append(name)
+            name = "att{}.W_g.{}.bias".format(i,j)
+            names.append(name)
+            name = "att{}.W_x.{}.weight".format(i,j)
+            names.append(name)
+            name = "att{}.W_x.{}.bias".format(i,j)
+            names.append(name)
+            name = "att{}.psi.{}.weight".format(i,j)
+            names.append(name)
+            name = "att{}.psi.{}.bias".format(i,j)
+            names.append(name)
     return names
