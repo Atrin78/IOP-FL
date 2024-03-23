@@ -90,7 +90,7 @@ if __name__ == "__main__":
           from nets.routeconv import RouteConv2D, RouteConvTranspose2D
           
           global_round = {
-               'I2CVB': 10,
+               'I2CVB': 95,
                'RUNMC': 99,
                'HK': 96,
                'BIDMC': 97,
@@ -104,7 +104,7 @@ if __name__ == "__main__":
           print('Finish intialization')
           
           rounds = {
-               'I2CVB': [10, 10, 10, 10, 10],
+               'I2CVB': [95, 95, 95, 95, 95],
                'RUNMC': [84, 87, 97, 99, 86],
                'HK': [80, 92, 73, 87, 91],
                'BIDMC': [78, 91, 72, 80, 74],
@@ -128,7 +128,15 @@ if __name__ == "__main__":
           metrics = federated_manager.ood_client.test_time_adaptation_by_iopfl(None)
           
      elif args.test:
-          ckpt = torch.load('trained local trajectory path')
+          global_round = {
+               'I2CVB': 95,
+               'RUNMC': 99,
+               'HK': 96,
+               'BIDMC': 97,
+               'UCL': 95,
+               'BMC': 99,
+               }
+          ckpt = torch.load(args.save_path +'/fedavg_global_round{}'.format(global_round[args.target]))
           model_trainer.set_model_params(ckpt)
           test_data_local_dict = datasets[1][-2]
           # test the trajectroy on all local clients
