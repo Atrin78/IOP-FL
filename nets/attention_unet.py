@@ -4,6 +4,7 @@ sys.path.append(base_path)
 from collections import OrderedDict
 import torch
 import torch.nn as nn
+from torch.nn import Conv2D, ConvTranspose2D
 import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 from torchvision.models.resnet import BasicBlock, model_urls, Bottleneck
@@ -93,45 +94,91 @@ class attention_UNet(nn.Module):
             bn_affine = True
             bn_track = True
 
-        features = init_features
-        self.encoder1 = attention_UNet._block(in_channels, features, name="enc1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder1.")
-        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.encoder2 = attention_UNet._block(features, features * 2, name="enc2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder2.")
-        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.encoder3 = attention_UNet._block(features * 2, features * 4, name="enc3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder3.")
-        self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.encoder4 = attention_UNet._block(features * 4, features * 8, name="enc4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder4.")
-        self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
+        attention_only = True
 
-        self.bottleneck = attention_UNet._block(features * 8, features * 16, name="bottleneck", bn_affine=bn_affine, bn_track=bn_track, prefix_name="bottleneck.")
+        features = init_features
+        if not attention_only:
+            self.encoder1 = attention_UNet._block(in_channels, features, name="enc1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder1.")
+            self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.encoder2 = attention_UNet._block(features, features * 2, name="enc2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder2.")
+            self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.encoder3 = attention_UNet._block(features * 2, features * 4, name="enc3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder3.")
+            self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.encoder4 = attention_UNet._block(features * 4, features * 8, name="enc4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder4.")
+            self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
+        else:
+            self.encoder1 = attention_UNet._block2(in_channels, features, name="enc1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder1.")
+            self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.encoder2 = attention_UNet._block2(features, features * 2, name="enc2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder2.")
+            self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.encoder3 = attention_UNet._block2(features * 2, features * 4, name="enc3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder3.")
+            self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.encoder4 = attention_UNet._block2(features * 4, features * 8, name="enc4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder4.")
+            self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
+
+        if not attention_only:
+            self.bottleneck = attention_UNet._block(features * 8, features * 16, name="bottleneck", bn_affine=bn_affine, bn_track=bn_track, prefix_name="bottleneck.")
+        else:
+            self.bottleneck = attention_UNet._block2(features * 8, features * 16, name="bottleneck", bn_affine=bn_affine, bn_track=bn_track, prefix_name="bottleneck.")
 
         self.att4 = Attention_block(features * 8, features * 8, features * 4, name="att4")
         self.att3 = Attention_block(features * 4, features * 4, features * 2, name="att3")
         self.att2 = Attention_block(features * 2, features * 2, features, name="att2")
         self.att1 = Attention_block(features * 1, features * 1, features//2, name="att1")
 
-        self.upconv4 = RouteConvTranspose2D(
-            features * 16, features * 8, kernel_size=2, name="upconv4" ,stride=2
-        )
-        self.decoder4 = attention_UNet._block((features * 8) * 2, features * 8, name="dec4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder4.")
+        if not attention_only:
+            self.upconv4 = RouteConvTranspose2D(
+                features * 16, features * 8, kernel_size=2, name="upconv4" ,stride=2
+            )
+            self.decoder4 = attention_UNet._block((features * 8) * 2, features * 8, name="dec4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder4.")
+        else:
+            self.upconv4 = ConvTranspose2D(
+                features * 16, features * 8, kernel_size=2, name="upconv4" ,stride=2
+            )
+            self.decoder4 = attention_UNet._block2((features * 8) * 2, features * 8, name="dec4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder4.")
 
-        self.upconv3 = RouteConvTranspose2D(
-            features * 8, features * 4, name="upconv3", kernel_size=2, stride=2,
-        )
-        self.decoder3 = attention_UNet._block((features * 4) * 2, features * 4, name="dec3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder3.")
-        self.upconv2 = RouteConvTranspose2D(
-            features * 4, features * 2, name="upconv2", kernel_size=2, stride=2
-        )
-        self.decoder2 = attention_UNet._block((features * 2) * 2, features * 2, name="dec2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder2.")
+        if not attention_only:
+            self.upconv3 = RouteConvTranspose2D(
+                features * 8, features * 4, name="upconv3", kernel_size=2, stride=2,
+            )
+            self.decoder3 = attention_UNet._block((features * 4) * 2, features * 4, name="dec3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder3.")
+        else:
+            self.upconv3 = ConvTranspose2D(
+                features * 8, features * 4, name="upconv3", kernel_size=2, stride=2,
+            )
+            self.decoder3 = attention_UNet._block2((features * 4) * 2, features * 4, name="dec3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder3.")
 
-        self.upconv1 = RouteConvTranspose2D(
-            features * 2, features, kernel_size=2, name="upconv1", stride=2,
-        )
-        self.decoder1 = attention_UNet._block(features * 2, features, name="dec1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder1.")
+        if not attention_only:
+            self.upconv2 = RouteConvTranspose2D(
+                features * 4, features * 2, name="upconv2", kernel_size=2, stride=2
+            )
+            self.decoder2 = attention_UNet._block((features * 2) * 2, features * 2, name="dec2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder2.")
+        else:
+            self.upconv2 = ConvTranspose2D(
+                features * 4, features * 2, name="upconv2", kernel_size=2, stride=2
+            )
+            self.decoder2 = attention_UNet._block2((features * 2) * 2, features * 2, name="dec2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder2.")
 
-        self.conv = RouteConv2D(
-            in_channels=features, out_channels=out_channels, kernel_size=1, name="conv" 
-        )
+        if not attention_only:
+            self.upconv1 = RouteConvTranspose2D(
+                features * 2, features, kernel_size=2, name="upconv1", stride=2,
+            )
+            self.decoder1 = attention_UNet._block(features * 2, features, name="dec1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder1.")
+        else:
+            self.upconv1 = ConvTranspose2D(
+                features * 2, features, kernel_size=2, name="upconv1", stride=2,
+            )
+            self.decoder1 = attention_UNet._block2(features * 2, features, name="dec1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder1.")
+
+        if not attention_only:
+            self.conv = RouteConv2D(
+                in_channels=features, out_channels=out_channels, kernel_size=1, name="conv" 
+            )
+        else: 
+            self.conv = Conv2D(
+                in_channels=features, out_channels=out_channels, kernel_size=1, name="conv" 
+            )
+
         self.bn = nn.BatchNorm2d(512)
         self.relu = nn.ReLU(inplace=True)
         self.avgpool = nn.AvgPool2d(24)
@@ -200,6 +247,40 @@ class attention_UNet(nn.Module):
                             in_channels=features,
                             out_channels=features,
                             name = prefix_name + name + "_conv2",
+                            kernel_size=3,
+                            padding=1,
+                            bias=False,
+                        ),
+                    ),
+                    (name + "_bn2", nn.BatchNorm2d(num_features=features, affine=bn_affine, track_running_stats=bn_track)),
+                    (name + "_relu2", nn.ReLU(inplace=True)),
+                ]
+            )
+        )
+
+
+    @staticmethod
+    def _block2(in_channels, features, bn_affine, bn_track, name):
+        return nn.Sequential(
+            OrderedDict(
+                [
+                    (
+                        name + "_conv1",
+                        nn.Conv2d(
+                            in_channels=in_channels,
+                            out_channels=features,
+                            kernel_size=3,
+                            padding=1,
+                            bias=False,
+                        ),
+                    ),
+                    (name + "_bn1", nn.BatchNorm2d(num_features=features)),
+                    (name + "_relu1", nn.ReLU(inplace=True)),
+                    (
+                        name + "_conv2",
+                        nn.Conv2d(
+                            in_channels=features,
+                            out_channels=features,
                             kernel_size=3,
                             padding=1,
                             bias=False,
