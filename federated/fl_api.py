@@ -96,7 +96,7 @@ class FedAvgAPI(object):
             self._local_test_on_all_clients(round_idx)
             # test results
             self._ood_test_on_global_model(round_idx, self.ood_client, self.ood_data, w_global)
-            self._ood_test_on_trajectory(round_idx)
+            #self._ood_test_on_trajectory(round_idx)
           
 
             # local val results
