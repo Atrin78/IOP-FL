@@ -76,7 +76,7 @@ class ModelTrainerSegmentation(ModelTrainer):
 
         for idx, (name, param) in  enumerate(var_list):
             param.requires_grad_(False)
-            if "bn" in name or name in names:
+            if name in names:
                 param.requires_grad_(True)
                 update_var_list.append(param)
                 update_name_list.append(name)
