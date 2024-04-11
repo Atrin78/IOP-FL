@@ -107,19 +107,19 @@ class attention_UNet(nn.Module):
             self.encoder4 = attention_UNet._block(features * 4, features * 8, name="enc4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder4.")
             self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
         else:
-            self.encoder1 = attention_UNet._block2(in_channels, features, name="enc1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder1.")
+            self.encoder1 = attention_UNet._block2(in_channels, features, name="enc1", bn_affine=bn_affine, bn_track=bn_track)
             self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
-            self.encoder2 = attention_UNet._block2(features, features * 2, name="enc2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder2.")
+            self.encoder2 = attention_UNet._block2(features, features * 2, name="enc2", bn_affine=bn_affine, bn_track=bn_track)
             self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
-            self.encoder3 = attention_UNet._block2(features * 2, features * 4, name="enc3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder3.")
+            self.encoder3 = attention_UNet._block2(features * 2, features * 4, name="enc3", bn_affine=bn_affine, bn_track=bn_track)
             self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
-            self.encoder4 = attention_UNet._block2(features * 4, features * 8, name="enc4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="encoder4.")
+            self.encoder4 = attention_UNet._block2(features * 4, features * 8, name="enc4", bn_affine=bn_affine, bn_track=bn_track)
             self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
 
         if not attention_only:
             self.bottleneck = attention_UNet._block(features * 8, features * 16, name="bottleneck", bn_affine=bn_affine, bn_track=bn_track, prefix_name="bottleneck.")
         else:
-            self.bottleneck = attention_UNet._block2(features * 8, features * 16, name="bottleneck", bn_affine=bn_affine, bn_track=bn_track, prefix_name="bottleneck.")
+            self.bottleneck = attention_UNet._block2(features * 8, features * 16, name="bottleneck", bn_affine=bn_affine, bn_track=bn_track)
 
         self.att4 = Attention_block(features * 8, features * 8, features * 4, name="att4")
         self.att3 = Attention_block(features * 4, features * 4, features * 2, name="att3")
@@ -133,9 +133,9 @@ class attention_UNet(nn.Module):
             self.decoder4 = attention_UNet._block((features * 8) * 2, features * 8, name="dec4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder4.")
         else:
             self.upconv4 = ConvTranspose2D(
-                features * 16, features * 8, kernel_size=2, name="upconv4" ,stride=2
+                features * 16, features * 8, kernel_size=2, stride=2
             )
-            self.decoder4 = attention_UNet._block2((features * 8) * 2, features * 8, name="dec4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder4.")
+            self.decoder4 = attention_UNet._block2((features * 8) * 2, features * 8, name="dec4", bn_affine=bn_affine, bn_track=bn_track)
 
         if not attention_only:
             self.upconv3 = RouteConvTranspose2D(
@@ -144,9 +144,9 @@ class attention_UNet(nn.Module):
             self.decoder3 = attention_UNet._block((features * 4) * 2, features * 4, name="dec3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder3.")
         else:
             self.upconv3 = ConvTranspose2D(
-                features * 8, features * 4, name="upconv3", kernel_size=2, stride=2,
+                features * 8, features * 4, kernel_size=2, stride=2
             )
-            self.decoder3 = attention_UNet._block2((features * 4) * 2, features * 4, name="dec3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder3.")
+            self.decoder3 = attention_UNet._block2((features * 4) * 2, features * 4, name="dec3", bn_affine=bn_affine, bn_track=bn_track)
 
         if not attention_only:
             self.upconv2 = RouteConvTranspose2D(
@@ -155,20 +155,20 @@ class attention_UNet(nn.Module):
             self.decoder2 = attention_UNet._block((features * 2) * 2, features * 2, name="dec2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder2.")
         else:
             self.upconv2 = ConvTranspose2D(
-                features * 4, features * 2, name="upconv2", kernel_size=2, stride=2
+                features * 4, features * 2, kernel_size=2, stride=2
             )
-            self.decoder2 = attention_UNet._block2((features * 2) * 2, features * 2, name="dec2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder2.")
+            self.decoder2 = attention_UNet._block2((features * 2) * 2, features * 2, name="dec2", bn_affine=bn_affine, bn_track=bn_track)
 
         if not attention_only:
             self.upconv1 = RouteConvTranspose2D(
-                features * 2, features, kernel_size=2, name="upconv1", stride=2,
+                features * 2, features, kernel_size=2, name="upconv1", stride=2
             )
             self.decoder1 = attention_UNet._block(features * 2, features, name="dec1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder1.")
         else:
             self.upconv1 = ConvTranspose2D(
-                features * 2, features, kernel_size=2, name="upconv1", stride=2,
+                features * 2, features, kernel_size=2, stride=2
             )
-            self.decoder1 = attention_UNet._block2(features * 2, features, name="dec1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder1.")
+            self.decoder1 = attention_UNet._block2(features * 2, features, name="dec1", bn_affine=bn_affine, bn_track=bn_track)
 
         if not attention_only:
             self.conv = RouteConv2D(
@@ -176,7 +176,7 @@ class attention_UNet(nn.Module):
             )
         else: 
             self.conv = Conv2D(
-                in_channels=features, out_channels=out_channels, kernel_size=1, name="conv" 
+                in_channels=features, out_channels=out_channels, kernel_size=1 
             )
 
         self.bn = nn.BatchNorm2d(512)
