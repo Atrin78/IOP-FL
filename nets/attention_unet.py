@@ -4,7 +4,7 @@ sys.path.append(base_path)
 from collections import OrderedDict
 import torch
 import torch.nn as nn
-from torch.nn import Conv2D, ConvTranspose2D
+from torch.nn import Conv2d, ConvTranspose2d
 import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 from torchvision.models.resnet import BasicBlock, model_urls, Bottleneck
