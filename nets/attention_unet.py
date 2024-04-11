@@ -132,7 +132,7 @@ class attention_UNet(nn.Module):
             )
             self.decoder4 = attention_UNet._block((features * 8) * 2, features * 8, name="dec4", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder4.")
         else:
-            self.upconv4 = ConvTranspose2D(
+            self.upconv4 = ConvTranspose2d(
                 features * 16, features * 8, kernel_size=2, stride=2
             )
             self.decoder4 = attention_UNet._block2((features * 8) * 2, features * 8, name="dec4", bn_affine=bn_affine, bn_track=bn_track)
@@ -143,7 +143,7 @@ class attention_UNet(nn.Module):
             )
             self.decoder3 = attention_UNet._block((features * 4) * 2, features * 4, name="dec3", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder3.")
         else:
-            self.upconv3 = ConvTranspose2D(
+            self.upconv3 = ConvTranspose2d(
                 features * 8, features * 4, kernel_size=2, stride=2
             )
             self.decoder3 = attention_UNet._block2((features * 4) * 2, features * 4, name="dec3", bn_affine=bn_affine, bn_track=bn_track)
@@ -154,7 +154,7 @@ class attention_UNet(nn.Module):
             )
             self.decoder2 = attention_UNet._block((features * 2) * 2, features * 2, name="dec2", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder2.")
         else:
-            self.upconv2 = ConvTranspose2D(
+            self.upconv2 = ConvTranspose2d(
                 features * 4, features * 2, kernel_size=2, stride=2
             )
             self.decoder2 = attention_UNet._block2((features * 2) * 2, features * 2, name="dec2", bn_affine=bn_affine, bn_track=bn_track)
@@ -165,7 +165,7 @@ class attention_UNet(nn.Module):
             )
             self.decoder1 = attention_UNet._block(features * 2, features, name="dec1", bn_affine=bn_affine, bn_track=bn_track, prefix_name="decoder1.")
         else:
-            self.upconv1 = ConvTranspose2D(
+            self.upconv1 = ConvTranspose2d(
                 features * 2, features, kernel_size=2, stride=2
             )
             self.decoder1 = attention_UNet._block2(features * 2, features, name="dec1", bn_affine=bn_affine, bn_track=bn_track)
@@ -175,7 +175,7 @@ class attention_UNet(nn.Module):
                 in_channels=features, out_channels=out_channels, kernel_size=1, name="conv" 
             )
         else: 
-            self.conv = Conv2D(
+            self.conv = Conv2d(
                 in_channels=features, out_channels=out_channels, kernel_size=1 
             )
 
