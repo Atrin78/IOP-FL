@@ -94,7 +94,7 @@ class attention_UNet(nn.Module):
             bn_affine = True
             bn_track = True
 
-        attention_only = True
+        attention_only = False
 
         features = init_features
         if not attention_only:
