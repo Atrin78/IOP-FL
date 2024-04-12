@@ -96,8 +96,8 @@ if __name__ == "__main__":
                'RUNMC': 99,
                'HK': 96,
                'BIDMC': 97,
-               'UCL': 95,
-               'BMC': 99,
+               'UCL': 90,
+               'BMC': 90,
                }
           
           ckpt = torch.load(args.save_path +'/fedavg_global_round{}'.format(global_round[args.target]))
@@ -110,8 +110,8 @@ if __name__ == "__main__":
                'RUNMC': [84, 87, 97, 99, 86],
                'HK': [80, 92, 73, 87, 91],
                'BIDMC': [78, 91, 72, 80, 74],
-               'UCL': [99, 90, 87, 91, 99],
-               'BMC': [50, 83, 99, 99, 94],
+               'UCL': [90, 90, 90, 90, 90],
+               'BMC': [90, 90, 90, 90, 90],
                }
           
           paths = [
