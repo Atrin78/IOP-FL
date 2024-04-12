@@ -135,8 +135,8 @@ if __name__ == "__main__":
                'RUNMC': 99,
                'HK': 96,
                'BIDMC': 97,
-               'UCL': 95,
-               'BMC': 99,
+               'UCL': 90,
+               'BMC': 90,
                }
           ckpt = torch.load(args.save_path +'/fedavg_global_round{}'.format(global_round[args.target]))
           model_trainer.set_model_params(ckpt)
