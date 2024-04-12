@@ -131,10 +131,10 @@ if __name__ == "__main__":
           
      elif args.test:
           global_round = {
-               'I2CVB': 95,
-               'RUNMC': 99,
-               'HK': 96,
-               'BIDMC': 97,
+               'I2CVB': 90,
+               'RUNMC': 90,
+               'HK': 90,
+               'BIDMC': 90,
                'UCL': 90,
                'BMC': 90,
                }
